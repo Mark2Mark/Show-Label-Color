@@ -2,7 +2,7 @@
 
 ## Plugin for Glyphsapp
 
-This is a Plugin for the [Glyphs font editor](http://glyphsapp.com/). It displays the Label Color for each glyph in the edit tab. For ALL glyphs. What a nice thing to have.
+This is a Plugin for the [Glyphs font editor](http://glyphsapp.com/). It displays the Label Color for each glyph in the edit tab. For ALL glyphs. It also shows the recently introduced layer color (left: glyph color, right: layer color). What a nice thing to have.
 
 ### How to use
 
