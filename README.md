@@ -10,7 +10,9 @@ Download or clone the whole `Glyphsapp-Plugins`repo (it will contain more plugin
 
 ### Examples
 
-![Show Label Color Demo](https://raw.githubusercontent.com/DeutschMark/Glyphsapp-Plugins/504b285a98b57f6e8ee937070e6d20bee6a4e169/Screenshots/LabelColor/LbC%2002.png?raw=true "Show Label Color Demo")
+![Show Label Color Demo](https://raw.githubusercontent.com/DeutschMark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2001.png?raw=true "Show Label Color Demo")
+
+![Show Label Color Demo](https://raw.githubusercontent.com/DeutschMark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2002.png?raw=true "Show Label Color Demo")
 
 ### Known issues
 
