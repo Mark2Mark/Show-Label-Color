@@ -1,8 +1,7 @@
 # Show Label Color
 
-## Plugin for Glyphsapp
+*This is a plugin for the [Glyphs font editor](http://glyphsapp.com/).*  
 
-This is a Plugin for the [Glyphs font editor](http://glyphsapp.com/).  
 It displays the Label Color for each glyph in the edit tab. **For aLL glyphs.** It also shows the recently introduced layer color (left: glyph color, right: layer color).
 
 ### Install
@@ -24,15 +23,15 @@ When ever you need it, toggle `Show * Label Color` from the view menu.
 
 ![Show Label Color Demo](https://raw.githubusercontent.com/DeutschMark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2002.png?raw=true "Show Label Color Demo")
 
-#### Known issues
+##### Known issues
 
 - None so far
 
-#### Pull Requests
+##### Pull Requests
 
 Feel free to comment or pull requests for any improvements.
 
-#### License
+##### License
 
 Copyright 2015 [Mark Frömberg](http://www.markfromberg.com/) *@DeutschMark*
 
