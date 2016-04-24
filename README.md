@@ -10,7 +10,7 @@ Download or clone the whole `Glyphsapp-Plugins`repo (it will contain more plugin
 
 ### Examples
 
-![Show Label Color Demo](https://raw.githubusercontent.com/DeutschMark/Glyphsapp-Plugins/504b285a98b57f6e8ee937070e6d20bee6a4e169/Screenshots/LabelColor/LbC%2002.png?raw=true "Show Label Color Demo")
+![Show Label Color Demo](https://raw.githubusercontent.com/Mark2Mark/Glyphsapp-Plugins/504b285a98b57f6e8ee937070e6d20bee6a4e169/Screenshots/LabelColor/LbC%2002.png?raw=true "Show Label Color Demo")
 
 ### Known issues
 
@@ -22,7 +22,7 @@ Feel free to comment or pull requests for any improvements.
 
 ### License
 
-Copyright 2015 [Mark Frömberg](http://www.markfromberg.com/) *@DeutschMark*
+Copyright 2015 [Mark Frömberg](http://www.markfromberg.com/) *@Mark2Mark*
 
 Made possible with the GlyphsSDK by Georg Seifert (@schriftgestalt) and Rainer Erich Scheichelbauer (@mekkablue).
 

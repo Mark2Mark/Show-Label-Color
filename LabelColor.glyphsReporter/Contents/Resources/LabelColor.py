@@ -9,7 +9,7 @@
 #	add clipping path https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/#//apple_ref/doc/uid/20000339-SW27
 
 import objc
-from Foundation import *
+# from Foundation import *
 from AppKit import *
 import sys, os, re
 import math
@@ -138,24 +138,33 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 			pass
 		elif drawingOption == "Full Glyph Body":
 			NSColor.colorWithCalibratedRed_green_blue_alpha_( 1, 1, 1, 1 ).set()
-			thisGlyphPath = Layer.copyDecomposedLayer().bezierPath()
+			try:
+				thisGlyphPath = Layer.copyDecomposedLayer().bezierPath()
+			except:
+				thisGlyphPath = Layer.copyDecomposedLayer().bezierPath
 			if thisGlyphPath:
 				thisGlyphPath.fill()
+
+	### Italic Angle Stuff
+	def angle(self, yPos, thisXHeight, thisAngle):
+		# rotation point is half of x-height
+		offset = math.tan(math.radians(thisAngle)) * thisXHeight/2
+		shift = math.tan(math.radians(thisAngle)) * yPos - offset
+		return shift
 
 	
 	def LabelColor( self, Layer ):
 		try:
 			try:
-				colorCode = Layer.parent.color
-				thisColor = labelColorsDict[colorCode]
+				thisColor = Layer.parent.colorObject
 			except:
 				# Glyphs 1.x or no layerColor:
 				thisColor = (1, 1, 1, 0)
 
 			try:
-				layerColor = Layer.color()
+				layerColor = Layer.colorObject # Layer.color()
 			except:
-				pass
+				layerColor = None
 			
 			try:
 				thisWidth = Layer.width
@@ -167,16 +176,12 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 				upm = thisFont.upm
 				thisAngle = thisMaster.italicAngle
 
-				
-				NSColor.colorWithCalibratedRed_green_blue_alpha_( *thisColor ).set()
+				try:
+					thisGlyphColor = thisColor.redComponent(), thisColor.greenComponent(), thisColor.blueComponent(), alpha #thisColor.alphaComponent()
+				except:
+					thisGlyphColor = 1, 1, 1, 0
+				NSColor.colorWithCalibratedRed_green_blue_alpha_( *thisGlyphColor ).set()
 
-
-				### Italic Angle Stuff
-				def angle(yPos):
-					# rotation point is half of x-height
-					offset = math.tan(math.radians(thisAngle)) * thisXHeight/2
-					shift = math.tan(math.radians(thisAngle)) * yPos - offset
-					return shift
 				
 				if drawingOption == "Label Size":
 					rectangle = [0, 0, thisWidth, -40]
@@ -190,15 +195,15 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 				
 
 
-				if layerColor:				
+				if layerColor != None:				
 					'''
 					LEFT = Glyph-Color
 					'''
 					pathRectLeft = NSBezierPath.bezierPath()
-					pathRectLeft.moveToPoint_( (rectangleLeft[0] + angle(rectangleLeft[1]), rectangleLeft[1]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[0] + angle(rectangleLeft[3]), rectangleLeft[3]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[2] + angle(rectangleLeft[3]), rectangleLeft[3]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[2] + angle(rectangleLeft[1]), rectangleLeft[1]) )
+					pathRectLeft.moveToPoint_( (rectangleLeft[0] + self.angle(rectangleLeft[1], thisXHeight, thisAngle), rectangleLeft[1]) )
+					pathRectLeft.lineToPoint_( (rectangleLeft[0] + self.angle(rectangleLeft[3], thisXHeight, thisAngle), rectangleLeft[3]) )
+					pathRectLeft.lineToPoint_( (rectangleLeft[2] + self.angle(rectangleLeft[3], thisXHeight, thisAngle), rectangleLeft[3]) )
+					pathRectLeft.lineToPoint_( (rectangleLeft[2] + self.angle(rectangleLeft[1], thisXHeight, thisAngle), rectangleLeft[1]) )
 					pathRectLeft.closePath()
 
 					pathRectLeft.fill()
@@ -207,10 +212,10 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 					RIGHT = Layer-Color
 					'''
 					pathRectRight = NSBezierPath.bezierPath()
-					pathRectRight.moveToPoint_( (rectangleRight[0] + angle(rectangleRight[1]), rectangleRight[1]) )
-					pathRectRight.lineToPoint_( (rectangleRight[0] + angle(rectangleRight[3]), rectangleRight[3]) )
-					pathRectRight.lineToPoint_( (rectangleRight[2] + angle(rectangleRight[3]), rectangleRight[3]) )
-					pathRectRight.lineToPoint_( (rectangleRight[2] + angle(rectangleRight[1]), rectangleRight[1]) )
+					pathRectRight.moveToPoint_( (rectangleRight[0] + self.angle(rectangleRight[1], thisXHeight, thisAngle), rectangleRight[1]) )
+					pathRectRight.lineToPoint_( (rectangleRight[0] + self.angle(rectangleRight[3], thisXHeight, thisAngle), rectangleRight[3]) )
+					pathRectRight.lineToPoint_( (rectangleRight[2] + self.angle(rectangleRight[3], thisXHeight, thisAngle), rectangleRight[3]) )
+					pathRectRight.lineToPoint_( (rectangleRight[2] + self.angle(rectangleRight[1], thisXHeight, thisAngle), rectangleRight[1]) )
 					pathRectRight.closePath()
 
 					thisLayerColor = layerColor.redComponent(), layerColor.greenComponent(), layerColor.blueComponent(), alpha #layerColor.alphaComponent()
@@ -223,16 +228,17 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 				else:
 					## using a bezier path instead of an NSRect for transforming ability
 					pathRect = NSBezierPath.bezierPath()
-					pathRect.moveToPoint_( (rectangle[0] + angle(rectangle[1]), rectangle[1]) )
-					pathRect.lineToPoint_( (rectangle[0] + angle(rectangle[3]), rectangle[3]) )
-					pathRect.lineToPoint_( (rectangle[2] + angle(rectangle[3]), rectangle[3]) )
-					pathRect.lineToPoint_( (rectangle[2] + angle(rectangle[1]), rectangle[1]) )
+					pathRect.moveToPoint_( (rectangle[0] + self.angle(rectangle[1], thisXHeight, thisAngle), rectangle[1]) )
+					pathRect.lineToPoint_( (rectangle[0] + self.angle(rectangle[3], thisXHeight, thisAngle), rectangle[3]) )
+					pathRect.lineToPoint_( (rectangle[2] + self.angle(rectangle[3], thisXHeight, thisAngle), rectangle[3]) )
+					pathRect.lineToPoint_( (rectangle[2] + self.angle(rectangle[1], thisXHeight, thisAngle), rectangle[1]) )
 					pathRect.closePath()
 
 					pathRect.fill()					
 
 			except:
-				pass
+				# print traceback.format_exc()
+				self.logToConsole(traceback.format_exc())
 
 
 		# except Exception as e:
@@ -326,5 +332,5 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 		Use self.logToConsole( "bla bla" ) for debugging.
 		"""
 		myLog = "Show %s plugin:\n%s" % ( self.title(), message )
-		print myLog
+		# print myLog
 		NSLog( myLog )
