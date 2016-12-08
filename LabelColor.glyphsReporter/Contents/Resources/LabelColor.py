@@ -78,7 +78,7 @@ class LabelColor ( NSObject, GlyphsReporterProtocol ):
 		E.g. 'return "Nodes"' will make the menu item read "Show Nodes".
 		"""
 		try:
-			return "* Label Color"
+			return "Label Color"
 		except Exception as e:
 			self.logToConsole( "title: %s" % str(e) )
 	
