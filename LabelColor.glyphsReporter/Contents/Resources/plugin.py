@@ -90,55 +90,46 @@ class LabelColor (ReporterPlugin):
 				thisMaster = thisFont.selectedFontMaster
 				thisDescender = thisMaster.descender
 				thisXHeight = thisMaster.xHeight
-				upm = thisFont.upm
 				thisAngle = thisMaster.italicAngle
-
+				if abs(thisAngle) > 0.001:
+					transform = NSAffineTransform.alloc().init()
+					slant = math.tan(thisAngle * math.pi / 180.0)
+					transform.shearXBy_atCenter_(slant, thisXHeight / -2.0)
+				else:
+					transform = False
+				
 				glyphColor.colorWithAlphaComponent_(alpha).set()
-
+				
 				if drawingOption == "Label Size":
-					rectangle = [0, 0, thisWidth, -40]
+					rectangle = NSMakeRect(0, 0, thisWidth, -40)
 				elif drawingOption == "Label Size Descender":
-					rectangle = [0, thisDescender, thisWidth, thisDescender-40]
-					rectangleLeft = [0, thisDescender, thisWidth/2, thisDescender-40]
-					rectangleRight = [thisWidth/2, thisDescender, thisWidth, thisDescender-40]
+					rectangle = NSMakeRect(0, thisDescender - 40, thisWidth, 40)
+					rectangleLeft = NSMakeRect(0, thisDescender - 40, thisWidth/2, 40)
+					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth, 40)
 				elif drawingOption == "Full Glyph Body":
-					ySize = upm+thisDescender
-					rectangle = [0, thisDescender, thisWidth, ySize]
+					rectangle = NSMakeRect(0, thisDescender, thisWidth, thisMaster.ascender - thisDescender)
 				
 				if layerColor != None:
 					'''
 					LEFT = Glyph-Color
 					'''
-					pathRectLeft = NSBezierPath.bezierPath()
-					pathRectLeft.moveToPoint_( (rectangleLeft[0] + self.angle(rectangleLeft[1], thisXHeight, thisAngle), rectangleLeft[1]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[0] + self.angle(rectangleLeft[3], thisXHeight, thisAngle), rectangleLeft[3]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[2] + self.angle(rectangleLeft[3], thisXHeight, thisAngle), rectangleLeft[3]) )
-					pathRectLeft.lineToPoint_( (rectangleLeft[2] + self.angle(rectangleLeft[1], thisXHeight, thisAngle), rectangleLeft[1]) )
-					pathRectLeft.closePath()
-
+					pathRectLeft = NSBezierPath.bezierPathWithRect_(rectangleLeft)
+					if transform:
+						pathRectLeft.transformUsingAffineTransform_(transform)
 					pathRectLeft.fill()
-
+					
 					'''
 					RIGHT = Layer-Color
 					'''
-					pathRectRight = NSBezierPath.bezierPath()
-					pathRectRight.moveToPoint_( (rectangleRight[0] + self.angle(rectangleRight[1], thisXHeight, thisAngle), rectangleRight[1]) )
-					pathRectRight.lineToPoint_( (rectangleRight[0] + self.angle(rectangleRight[3], thisXHeight, thisAngle), rectangleRight[3]) )
-					pathRectRight.lineToPoint_( (rectangleRight[2] + self.angle(rectangleRight[3], thisXHeight, thisAngle), rectangleRight[3]) )
-					pathRectRight.lineToPoint_( (rectangleRight[2] + self.angle(rectangleRight[1], thisXHeight, thisAngle), rectangleRight[1]) )
-					pathRectRight.closePath()
-
 					layerColor.colorWithAlphaComponent_(alpha).set()
+					pathRectRight = NSBezierPath.bezierPathWithRect_(rectangleRight)
+					if transform:
+						pathRectRight.transformUsingAffineTransform_(transform)
 					pathRectRight.fill()
 				else:
-					## using a bezier path instead of an NSRect for transforming ability
-					pathRect = NSBezierPath.bezierPath()
-					pathRect.moveToPoint_( (rectangle[0] + self.angle(rectangle[1], thisXHeight, thisAngle), rectangle[1]) )
-					pathRect.lineToPoint_( (rectangle[0] + self.angle(rectangle[3], thisXHeight, thisAngle), rectangle[3]) )
-					pathRect.lineToPoint_( (rectangle[2] + self.angle(rectangle[3], thisXHeight, thisAngle), rectangle[3]) )
-					pathRect.lineToPoint_( (rectangle[2] + self.angle(rectangle[1], thisXHeight, thisAngle), rectangle[1]) )
-					pathRect.closePath()
-
+					pathRect = NSBezierPath.bezierPathWithRect_(rectangle)
+					if transform:
+						pathRect.transformUsingAffineTransform_(transform)
 					pathRect.fill()
 			except:
 				print traceback.format_exc()
