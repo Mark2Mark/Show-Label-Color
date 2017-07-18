@@ -24,8 +24,6 @@ drawingOption = "Label Size Descender"
 #### #######++++++++++++++++++++++++++++++++++++++++++
 #### #######++++++++++++++++++++++++++++++++++++++++++
 
-
-alpha = .9
 labelColorsDict = {
 	0 : (0.93, 0.57, 0.47, alpha), # red
 	1 : (0.98, 0.79, 0.51, alpha), # orange
@@ -41,6 +39,9 @@ labelColorsDict = {
 	11 : (0.56, 0.56, 0.56, alpha), # charcoal
 	9223372036854775807 : (1, 1, 1, 0), # not colored, white
 }
+alpha = 0.9
+if drawingOption == "Full Glyph Body":
+	alpha = 0.5
 
 class LabelColor (ReporterPlugin):
 	def settings(self):
