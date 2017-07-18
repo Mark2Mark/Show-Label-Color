@@ -69,13 +69,17 @@ class LabelColor (ReporterPlugin):
 	def LabelColor( self, Layer ):
 		try:
 			try:
-				thisColor = Layer.parent.colorObject
+				glyphColor = Layer.parent.colorObject
 			except:
-				# Glyphs 1.x or no layerColor:
-				thisColor = (1, 1, 1, 0)
+				glyphColor = None
 			try:
 				layerColor = Layer.colorObject # Layer.color()
 			except:
+				# Glyphs 1.x or no layerColor:
+				layerColor = None
+			
+			if layerColor and not glyphColor:
+				glyphColor = layerColor
 				layerColor = None
 			
 			try:
@@ -88,11 +92,7 @@ class LabelColor (ReporterPlugin):
 				upm = thisFont.upm
 				thisAngle = thisMaster.italicAngle
 
-				try:
-					thisGlyphColor = thisColor.redComponent(), thisColor.greenComponent(), thisColor.blueComponent(), alpha #thisColor.alphaComponent()
-				except:
-					thisGlyphColor = 1, 1, 1, 0
-				NSColor.colorWithCalibratedRed_green_blue_alpha_( *thisGlyphColor ).set()
+				glyphColor.colorWithAlphaComponent_(alpha).set()
 
 				if drawingOption == "Label Size":
 					rectangle = [0, 0, thisWidth, -40]
@@ -127,10 +127,7 @@ class LabelColor (ReporterPlugin):
 					pathRectRight.lineToPoint_( (rectangleRight[2] + self.angle(rectangleRight[1], thisXHeight, thisAngle), rectangleRight[1]) )
 					pathRectRight.closePath()
 
-					thisLayerColor = layerColor.redComponent(), layerColor.greenComponent(), layerColor.blueComponent(), alpha #layerColor.alphaComponent()
-					pathRectRight.setLineWidth_(5)
-					NSColor.colorWithCalibratedRed_green_blue_alpha_( *thisLayerColor ).set()
-
+					layerColor.colorWithAlphaComponent_(alpha).set()
 					pathRectRight.fill()
 				else:
 					## using a bezier path instead of an NSRect for transforming ability
