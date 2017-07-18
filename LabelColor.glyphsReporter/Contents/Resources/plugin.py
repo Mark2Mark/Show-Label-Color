@@ -60,6 +60,8 @@ class LabelColor (ReporterPlugin):
 				glyphColor = layerColor
 				layerColor = None
 			
+			if glyphColor is None:
+				return
 			try:
 				thisWidth = Layer.width
 				thisGlyph = Layer.parent
