@@ -135,6 +135,16 @@ class LabelColor (ReporterPlugin):
 		except:
 			print traceback.format_exc()
 	
+	def preview( self, layer ):
+		"""
+		Whatever you draw here will be displayed BEHIND the paths.
+		"""
+		try:
+			self.LabelColor( layer )
+			# self.BlockOutGlyph( Layer )
+		except:
+			print traceback.format_exc()
+	
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, Layer ):
 		return True
 	
