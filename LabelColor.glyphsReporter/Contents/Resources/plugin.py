@@ -24,21 +24,6 @@ drawingOption = "Label Size Descender"
 #### #######++++++++++++++++++++++++++++++++++++++++++
 #### #######++++++++++++++++++++++++++++++++++++++++++
 
-labelColorsDict = {
-	0 : (0.93, 0.57, 0.47, alpha), # red
-	1 : (0.98, 0.79, 0.51, alpha), # orange
-	2 : (0.84, 0.76, 0.62, alpha), # brown
-	3 : (0.98, 0.98, 0.51, alpha), # yellow
-	4 : (0.80, 0.96, 0.63, alpha), # light green
-	5 : (0.48, 0.76, 0.46, alpha), # dark green
-	6 : (0.47, 0.82, 0.96, alpha), # light blue
-	7 : (0.60, 0.61, 0.91, alpha), # dark blue
-	8 : (0.71, 0.52, 0.89, alpha), # purple
-	9 : (0.98, 0.63, 0.82, alpha), # magenta
-	10 : (0.86, 0.86, 0.86, alpha), # light gray
-	11 : (0.56, 0.56, 0.56, alpha), # charcoal
-	9223372036854775807 : (1, 1, 1, 0), # not colored, white
-}
 alpha = 0.9
 if drawingOption == "Full Glyph Body":
 	alpha = 0.5
@@ -58,14 +43,6 @@ class LabelColor (ReporterPlugin):
 				thisGlyphPath = Layer.copyDecomposedLayer().bezierPath
 			if thisGlyphPath:
 				thisGlyphPath.fill()
-
-	### Italic Angle Stuff
-	def angle(self, yPos, thisXHeight, thisAngle):
-		# rotation point is half of x-height
-		offset = math.tan(math.radians(thisAngle)) * thisXHeight/2
-		shift = math.tan(math.radians(thisAngle)) * yPos - offset
-		return shift
-
 	
 	def LabelColor( self, Layer ):
 		try:
