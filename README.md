@@ -19,9 +19,13 @@ When ever you need it, toggle `Show * Label Color` from the view menu.
 
 ### Examples
 
-![Show Label Color Demo](https://raw.githubusercontent.com/Mark2Mark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2001.png?raw=true "Show Label Color Demo")
+<p align="center">
 
-![Show Label Color Demo](https://raw.githubusercontent.com/Mark2Mark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2002.png?raw=true "Show Label Color Demo")
+<img src="https://raw.githubusercontent.com/Mark2Mark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2001.png" alt="Show Label Color Demo" height="300px">
+
+<img src="https://raw.githubusercontent.com/Mark2Mark/Show-Label-Color/d054d4d05d6f16b2be49f055f2b06b27725b81c8/Screenshots/Show%20Label%20Color%2002.png" alt="Show Label Color Demo" height="300px">
+
+</p>
 
 ##### Known issues
 
