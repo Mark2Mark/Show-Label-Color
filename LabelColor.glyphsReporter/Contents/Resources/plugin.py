@@ -8,10 +8,8 @@
 # TODO:
 #	add clipping path https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSBezierPath_Class/#//apple_ref/doc/uid/20000339-SW27
 
-from GlyphsApp.plugins import *
 import objc
-# from Foundation import *
-from AppKit import *
+from GlyphsApp.plugins import *
 import sys, os, re
 import math
 import traceback
