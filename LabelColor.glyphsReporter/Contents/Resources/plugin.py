@@ -82,7 +82,7 @@ class LabelColor (ReporterPlugin):
 				elif drawingOption == "Label Size Descender":
 					rectangle = NSMakeRect(0, thisDescender - 40, thisWidth, 40)
 					rectangleLeft = NSMakeRect(0, thisDescender - 40, thisWidth/2, 40)
-					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth, 40)
+					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth/2, 40)
 				elif drawingOption == "Full Glyph Body":
 					rectangle = NSMakeRect(0, thisDescender, thisWidth, thisMaster.ascender - thisDescender)
 				
