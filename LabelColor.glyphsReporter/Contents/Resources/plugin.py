@@ -41,7 +41,7 @@ class LabelColor (ReporterPlugin):
 				thisGlyphPath = Layer.copyDecomposedLayer().bezierPath
 			if thisGlyphPath:
 				thisGlyphPath.fill()
-	
+
 	def LabelColor( self, Layer ):
 		try:
 			try:
@@ -53,11 +53,11 @@ class LabelColor (ReporterPlugin):
 			except:
 				# Glyphs 1.x or no layerColor:
 				layerColor = None
-			
+
 			if layerColor and not glyphColor:
 				glyphColor = layerColor
 				layerColor = None
-			
+
 			if glyphColor is None:
 				return
 			try:
@@ -74,18 +74,18 @@ class LabelColor (ReporterPlugin):
 					transform.shearXBy_atCenter_(slant, thisXHeight / -2.0)
 				else:
 					transform = False
-				
+
 				glyphColor.colorWithAlphaComponent_(alpha).set()
-				
+
 				if drawingOption == "Label Size":
 					rectangle = NSMakeRect(0, 0, thisWidth, -40)
 				elif drawingOption == "Label Size Descender":
 					rectangle = NSMakeRect(0, thisDescender - 40, thisWidth, 40)
 					rectangleLeft = NSMakeRect(0, thisDescender - 40, thisWidth/2, 40)
-					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth, 40)
+					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth/2, 40)
 				elif drawingOption == "Full Glyph Body":
 					rectangle = NSMakeRect(0, thisDescender, thisWidth, thisMaster.ascender - thisDescender)
-				
+
 				if layerColor != None:
 					'''
 					LEFT = Glyph-Color
@@ -94,7 +94,7 @@ class LabelColor (ReporterPlugin):
 					if transform:
 						pathRectLeft.transformUsingAffineTransform_(transform)
 					pathRectLeft.fill()
-					
+
 					'''
 					RIGHT = Layer-Color
 					'''
@@ -112,7 +112,7 @@ class LabelColor (ReporterPlugin):
 				print traceback.format_exc()
 		except:
 			print traceback.format_exc()
-			
+
 	def background( self, layer ):
 		"""
 		Whatever you draw here will be displayed BEHIND the paths.
@@ -122,7 +122,7 @@ class LabelColor (ReporterPlugin):
 			# self.BlockOutGlyph( Layer )
 		except:
 			print traceback.format_exc()
-	
+
 	def inactiveLayers(self, layer):
 		"""
 		Whatever you draw here will be displayed behind the paths, but for inactive masters.
@@ -132,7 +132,7 @@ class LabelColor (ReporterPlugin):
 			# self.BlockOutGlyph( Layer )
 		except:
 			print traceback.format_exc()
-	
+
 	def preview( self, layer ):
 		"""
 		Whatever you draw here will be displayed BEHIND the paths.
@@ -142,10 +142,10 @@ class LabelColor (ReporterPlugin):
 			# self.BlockOutGlyph( Layer )
 		except:
 			print traceback.format_exc()
-	
+
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, Layer ):
 		return True
-	
+
 	# def setController_( self, Controller ):
 	# 	"""
 	# 	Use self.controller as object for the current view controller.
@@ -154,7 +154,7 @@ class LabelColor (ReporterPlugin):
 	# 		self.controller = Controller
 	# 	except Exception as e:
 	# 		self.logToConsole( "Could not set controller" )
-	
+
 	# def logToConsole( self, message ):
 	# 	"""
 	# 	The variable 'message' will be passed to Console.app.
