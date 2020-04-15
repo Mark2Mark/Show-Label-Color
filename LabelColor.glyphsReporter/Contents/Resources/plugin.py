@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from __future__ import division, print_function, unicode_literals
 
 '''
 • See OPTION below to either use Label Size or Whole Glyph Body.
@@ -10,8 +11,8 @@
 
 import objc
 from GlyphsApp.plugins import *
+from math import tan, pi
 import sys, os, re
-import math
 import traceback
 
 #### OTIONS ++++++++++++++++++++++++++++++++++++++++++
@@ -27,9 +28,16 @@ if drawingOption == "Full Glyph Body":
 	alpha = 0.5
 
 class LabelColor (ReporterPlugin):
+	@objc.python_method
 	def settings(self):
-		self.menuName = Glyphs.localize({'en': u'Label Color', 'de': u'Label Farbe'})
-
+		self.menuName = Glyphs.localize({
+			'en': 'Label Color',
+			'de': 'Etikettenfarbe',
+			'fr': 'couleur d’etiquette',
+			'es': 'color',
+		})
+	
+	@objc.python_method
 	def BlockOutGlyph( self, Layer ):
 		if drawingOption == "Label Size":
 			pass
@@ -42,6 +50,7 @@ class LabelColor (ReporterPlugin):
 			if thisGlyphPath:
 				thisGlyphPath.fill()
 
+	@objc.python_method
 	def LabelColor( self, Layer ):
 		try:
 			try:
@@ -70,7 +79,7 @@ class LabelColor (ReporterPlugin):
 				thisAngle = thisMaster.italicAngle
 				if abs(thisAngle) > 0.001:
 					transform = NSAffineTransform.alloc().init()
-					slant = math.tan(thisAngle * math.pi / 180.0)
+					slant = tan(thisAngle * pi / 180.0)
 					transform.shearXBy_atCenter_(slant, thisXHeight / -2.0)
 				else:
 					transform = False
@@ -109,10 +118,11 @@ class LabelColor (ReporterPlugin):
 						pathRect.transformUsingAffineTransform_(transform)
 					pathRect.fill()
 			except:
-				print traceback.format_exc()
+				print(traceback.format_exc())
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
+	@objc.python_method
 	def background( self, layer ):
 		"""
 		Whatever you draw here will be displayed BEHIND the paths.
@@ -121,9 +131,10 @@ class LabelColor (ReporterPlugin):
 			self.LabelColor( layer )
 			# self.BlockOutGlyph( Layer )
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
-	def inactiveLayers(self, layer):
+	@objc.python_method
+	def inactiveLayerBackground(self, layer):
 		"""
 		Whatever you draw here will be displayed behind the paths, but for inactive masters.
 		"""
@@ -131,8 +142,9 @@ class LabelColor (ReporterPlugin):
 			self.LabelColor( layer )
 			# self.BlockOutGlyph( Layer )
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
+	@objc.python_method
 	def preview( self, layer ):
 		"""
 		Whatever you draw here will be displayed BEHIND the paths.
@@ -141,7 +153,7 @@ class LabelColor (ReporterPlugin):
 			self.LabelColor( layer )
 			# self.BlockOutGlyph( Layer )
 		except:
-			print traceback.format_exc()
+			print(traceback.format_exc())
 
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, Layer ):
 		return True
@@ -161,5 +173,10 @@ class LabelColor (ReporterPlugin):
 	# 	Use self.logToConsole( "bla bla" ) for debugging.
 	# 	"""
 	# 	myLog = "Show %s plugin:\n%s" % ( self.title(), message )
-	# 	# print myLog
+	# 	# print(myLog)
 	# 	NSLog( myLog )
+
+	@objc.python_method
+	def __file__(self):
+		"""Please leave this method unchanged"""
+		return __file__
