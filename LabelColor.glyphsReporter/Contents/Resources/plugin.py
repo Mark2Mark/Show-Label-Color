@@ -12,10 +12,9 @@ from __future__ import division, print_function, unicode_literals
 import objc
 from GlyphsApp.plugins import *
 from math import tan, pi
-import sys, os, re
 import traceback
 
-#### OTIONS ++++++++++++++++++++++++++++++++++++++++++
+#### OPTIONS +++++++++++++++++++++++++++++++++++++++++
 #### #######++++++++++++++++++++++++++++++++++++++++++
 # drawingOption = "Label Size"
 drawingOption = "Label Size Descender"
@@ -34,7 +33,7 @@ class LabelColor (ReporterPlugin):
 			'en': 'Label Color',
 			'de': 'Etikettenfarbe',
 			'fr': 'couleur d’etiquette',
-			'es': 'color',
+			'es': 'color de etiqueta',
 		})
 	
 	@objc.python_method
@@ -53,15 +52,19 @@ class LabelColor (ReporterPlugin):
 	@objc.python_method
 	def LabelColor( self, Layer ):
 		try:
+			glyphColor = None
+			layerColor = None
+				
 			try:
 				glyphColor = Layer.parent.colorObject
 			except:
-				glyphColor = None
+				pass
+				
 			try:
 				layerColor = Layer.colorObject # Layer.color()
 			except:
 				# Glyphs 1.x or no layerColor:
-				layerColor = None
+				pass
 
 			if layerColor and not glyphColor:
 				glyphColor = layerColor
@@ -73,16 +76,16 @@ class LabelColor (ReporterPlugin):
 				thisWidth = Layer.width
 				thisGlyph = Layer.parent
 				thisFont = thisGlyph.parent
-				thisMaster = thisFont.selectedFontMaster
+				thisMaster = Layer.master
 				thisDescender = thisMaster.descender
 				thisXHeight = thisMaster.xHeight
 				thisAngle = thisMaster.italicAngle
 				if abs(thisAngle) > 0.001:
 					transform = NSAffineTransform.alloc().init()
 					slant = tan(thisAngle * pi / 180.0)
-					transform.shearXBy_atCenter_(slant, thisXHeight / -2.0)
+					transform.shearXBy_atCenter_(slant, thisXHeight*0.5)
 				else:
-					transform = False
+					transform = None
 
 				glyphColor.colorWithAlphaComponent_(alpha).set()
 
@@ -95,7 +98,7 @@ class LabelColor (ReporterPlugin):
 				elif drawingOption == "Full Glyph Body":
 					rectangle = NSMakeRect(0, thisDescender, thisWidth, thisMaster.ascender - thisDescender)
 
-				if layerColor != None:
+				if not layerColor is None:
 					'''
 					LEFT = Glyph-Color
 					'''
