@@ -79,10 +79,11 @@ class LabelColor (ReporterPlugin):
 				thisMaster = Layer.master
 				thisDescender = thisMaster.descender
 				thisXHeight = thisMaster.xHeight
-				try:
-					thisAngle = Layer.italicAngle  # Glyphs 2
-				except Exception as e:
-					thisAngle = Layer.italicAngle() # Glyphs 2
+				if hasattr(Glyphs, 'versionNumber') and Glyphs.versionNumber >= 3.0:
+					thisAngle = Layer.italicAngle
+				else:
+					thisAngle = Layer.italicAngle()
+
 				if abs(thisAngle) > 0.001:
 					transform = NSAffineTransform.alloc().init()
 					slant = tan(thisAngle * pi / 180.0)
