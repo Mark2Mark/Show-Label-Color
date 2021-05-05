@@ -22,6 +22,7 @@ drawingOption = "Label Size Descender"
 #### #######++++++++++++++++++++++++++++++++++++++++++
 #### #######++++++++++++++++++++++++++++++++++++++++++
 
+gap = 0
 alpha = 0.9
 if drawingOption == "Full Glyph Body":
 	alpha = 0.5
@@ -66,11 +67,11 @@ class LabelColor (ReporterPlugin):
 				# Glyphs 1.x or no layerColor:
 				pass
 
-			if layerColor and not glyphColor:
-				glyphColor = layerColor
-				layerColor = None
+			# if layerColor and not glyphColor:
+			# 	glyphColor = layerColor
+			# 	layerColor = None
 
-			if glyphColor is None:
+			if glyphColor is None and layerColor is None:
 				return
 			try:
 				thisWidth = Layer.width
@@ -91,26 +92,31 @@ class LabelColor (ReporterPlugin):
 				else:
 					transform = None
 
-				glyphColor.colorWithAlphaComponent_(alpha).set()
+				# glyphColor.colorWithAlphaComponent_(alpha).set()
 
 				if drawingOption == "Label Size":
-					rectangle = NSMakeRect(0, 0, thisWidth, -40)
+					# rectangle = NSMakeRect(0, 0, thisWidth, -40)
+					rectangle = NSMakeRect(gap, 0, thisWidth-gap, -40)
 				elif drawingOption == "Label Size Descender":
-					rectangle = NSMakeRect(0, thisDescender - 40, thisWidth, 40)
-					rectangleLeft = NSMakeRect(0, thisDescender - 40, thisWidth/2, 40)
-					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth/2, 40)
+					# rectangle = NSMakeRect(0, thisDescender - 40, thisWidth, 40)
+					rectangle = NSMakeRect(gap, thisDescender - 40, thisWidth-gap*2, 40)
+					# rectangleLeft = NSMakeRect(0, thisDescender - 40, thisWidth/2, 40)
+					rectangleLeft = NSMakeRect(gap, thisDescender - 40, thisWidth/2-gap, 40)
+					# rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth/2, 40)
+					rectangleRight = NSMakeRect(thisWidth/2, thisDescender - 40, thisWidth/2-gap, 40)
 				elif drawingOption == "Full Glyph Body":
-					rectangle = NSMakeRect(0, thisDescender, thisWidth, thisMaster.ascender - thisDescender)
+					rectangle = NSMakeRect(gap, thisDescender, thisWidth-gap, thisMaster.ascender - thisDescender)
 
-				if not layerColor is None:
+				if layerColor and glyphColor:
 					'''
 					LEFT = Glyph-Color
 					'''
+					glyphColor.colorWithAlphaComponent_(alpha).set()
 					pathRectLeft = NSBezierPath.bezierPathWithRect_(rectangleLeft)
 					if transform:
 						pathRectLeft.transformUsingAffineTransform_(transform)
 					pathRectLeft.fill()
-
+					
 					'''
 					RIGHT = Layer-Color
 					'''
@@ -119,11 +125,23 @@ class LabelColor (ReporterPlugin):
 					if transform:
 						pathRectRight.transformUsingAffineTransform_(transform)
 					pathRectRight.fill()
-				else:
+
+				# Glyph Color Only (Full Rectangle)
+				elif glyphColor and layerColor == None:
+					glyphColor.colorWithAlphaComponent_(alpha).set()
 					pathRect = NSBezierPath.bezierPathWithRect_(rectangle)
 					if transform:
 						pathRect.transformUsingAffineTransform_(transform)
 					pathRect.fill()
+
+				# Layer Color Only (Right Rectangle)
+				elif glyphColor == None and layerColor:
+					layerColor.colorWithAlphaComponent_(alpha).set()
+					pathRect = NSBezierPath.bezierPathWithRect_(rectangleRight)
+					if transform:
+						pathRect.transformUsingAffineTransform_(transform)
+					pathRect.fill()
+
 			except:
 				print(traceback.format_exc())
 		except:
